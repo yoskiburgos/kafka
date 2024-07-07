@@ -1,0 +1,15 @@
+#docker run -d --hostname my-rabbit --name some-rabbit rabbitmq:3-management
+# guest / guest
+
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"  # Puerto para las conexiones de RabbitMQ
+      - "15672:15672"  # Puerto para la interfaz de administración
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
