@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  artemis:
+    image: apache/activemq-artemis
+    container_name: artemis
+    environment:
+      ARTEMIS_USER: "admin"
+      ARTEMIS_PASSWORD: "admin"
+      DISABLE_SECURITY: 'false'
+    ports:
+      - "61616:61616" # puerto para conectar clientes
+      - "8161:8161"   # puerto para la consola de administración
+    volumes:
+      - artemis-data:/var/lib/artemis/data
+      - artemis-etc:/var/lib/artemis/etc
+      - artemis-log:/var/lib/artemis/log
+      - artemis-journal:/var/lib/artemis/journal
+      - artemis-expiry:/var/lib/artemis/expiry
+      - artemis-bindings:/var/lib/artemis/bindings
+
+volumes:
+  artemis-data:
+  artemis-etc:
+  artemis-log:
+  artemis-journal:
+  artemis-expiry:
+  artemis-bindings:
