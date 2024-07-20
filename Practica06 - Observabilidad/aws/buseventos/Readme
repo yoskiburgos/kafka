@@ -1,0 +1,8 @@
+Para ejecutar el codigo de terraform :
+1. Crear la cuenta de AWS
+2. Instalar aws cli     y    terraform cli
+3. Crear el lambda_ manualmente
+4. Ejecutar el codigo terraform
+5. Asociar sqs con lambda_
+6. Eliminar el despliegue
+7. Eliminar cualquier rezago de servicios en aws

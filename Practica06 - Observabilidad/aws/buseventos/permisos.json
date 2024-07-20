@@ -1,0 +1,22 @@
+//Este permiso es para asociarlo con el lambda que se cree 
+//manualmente
+
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "Statement1",
+			"Effect": "Allow",
+			"Action": [
+				"sqs:SendMessage",
+                "sqs:ReceiveMessage",
+				"sqs:DeleteMessage",
+				"sqs:GetQueueAttributes",
+               "lambda:InvokeFunction"
+			],
+			"Resource": [
+				"*"
+			]
+		}
+	]
+}

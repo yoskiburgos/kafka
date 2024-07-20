@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - monitoring
+
+  rabbitmq-exporter:
+    image: kbudde/rabbitmq-exporter:latest
+    container_name: rabbitmq-exporter
+    environment:
+      RABBITMQ_URL: http://user:password@rabbitmq:15672
+      RABBITMQ_EXPORTER_OUTPUT_FORMAT: JSON
+      RABBITMQ_EXPORTER_RABBIT_CAPABILITIES: bert,no_sort
+      RABBITMQ_EXPORTER_LOG_LEVEL: info
+    ports:
+      - "9419:9419"
+    depends_on:
+      - rabbitmq
+    command: 
+      - './rabbitmq_exporter --config.file=rabbitmq.conf' 
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    driver: bridge
+
+
+#TEMPLATES DE DASHBOARDS
+#https://grafana.com/grafana/dashboards/
+
+#ESQUEMA DE TRABAJO PARA LA OBSERVABILIDAD
+#Recurso          Rabbit                    Rabbit        Rabbit
+#Colector         rabbit - exporter         Logstash      Fluent bit
+#BD               promethus                 Elastic       Dynatrace
+#Visualizador     Grafana                   Kibana        Dynatrace
